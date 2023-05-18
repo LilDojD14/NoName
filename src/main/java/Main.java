@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class Main {
     public static void main(String[] args) {
@@ -9,12 +10,15 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        try (InputStream inputStream = new FileInputStream(file);){
-            int nextSymb = inputStream.read();
-            while (nextSymb!=-1){
-                System.out.print((char) nextSymb);
-                nextSymb = inputStream.read();
+        try (Reader reader = new InputStreamReader(new FileInputStream(file))){
+            char[] array = new char[8192];
+            int a = reader.read(array);
+            StringBuilder result = new StringBuilder();
+            while (a>0){
+                result.append(new String(array,0,a));
+                a = reader.read(array);
             }
+            System.out.println(result);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
